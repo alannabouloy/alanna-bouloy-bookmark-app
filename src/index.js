@@ -11,6 +11,8 @@ import api from './api';
 const main = function(){
 //call event listener function
 //call render
+  let id = 'ckfg0l2r7003x0k14hh5b03hs';
+  console.log(api.deleteBookmark(id));
 
 };
 
