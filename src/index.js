@@ -11,8 +11,11 @@ import api from './api';
 const main = function(){
 //call event listener function
 //call render
-bookmarkApp.render();
+  bookmarkApp.render();
 
+
+  
+  bookmarkApp.render();
 };
 
 $(main());
