@@ -1,7 +1,7 @@
-const bookmarks = [];
+const bookmarks = [{title: 'Google', url: 'https://wwww.google.com', desc:'a handy site', rating: 5, expanded: false,}];
 //each bookmark should be and object with following data: title (str), url(str), description(str), rating(num 1-5), expanded(bool), id(str)
 
-let bookmarkNum = 0;
+let bookmarkNum = 1;
 let adding = false;
 let editing = false;
 let error = null;
