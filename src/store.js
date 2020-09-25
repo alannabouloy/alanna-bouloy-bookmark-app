@@ -21,7 +21,8 @@ const addBookmark = function(bookmark){
 };
 
 const findAndDelete = function(id){
-  const index = bookmarks.findIndex(bookmark => bookmark.id = findById(id));
+  const index = bookmarks.findIndex(bookmark => bookmark.id === id);
+  console.log (bookmarks[index]);
   bookmarks.splice(index, 1);
 };
 
@@ -39,7 +40,7 @@ const changeFilter = function(rating){
 };
 
 const findAndUpdate = function(id, newData){
-  const index = bookmarks.findIndex(bookmark => bookmark.id = findById(id));
+  const index = bookmarks.findIndex(bookmark => bookmark.id === findById(id));
   bookmarks[index] = newData;
 };
 

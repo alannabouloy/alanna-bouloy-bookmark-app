@@ -63,11 +63,13 @@ const handleBookmarkToggleClick = function(){
 
 const handleDeleteButton = function(){
   //listen for delete button click
-  $('main').on('click', '.delete-button', event => {
-    const id = getItemIdFromElement(event.currentTarget);
+  $('main').on('click', '.delete-button', function(event) {
+    const id = getItemIdFromElement(this.closest('button'));
+    this.closest('li').remove();
     api.deleteBookmark(id)
       .then(() => {
         store.findAndDelete(id);
+        store.bookmarkNum -= 1;
         render();
       });
   });
@@ -78,6 +80,7 @@ const handleDeleteButton = function(){
 };
 
 const getItemIdFromElement = function (item) {
+  console.log($(item).attr('id'));
   return $(item).attr('id');
     
 };
@@ -238,11 +241,12 @@ const addTemplate = function(){
         name="title"
         id="js-bookmark-title"
         placeholder="My Favorite Website"
+        required
       />
     </div>
     <div>
         <label for='js-bookmark-url'>Website URL</label>
-        <input type="text" id='js-bookmark-url' name= "url" placeholder="https://myfavoritewebsite.com"/>
+        <input type="text" id='js-bookmark-url' name= "url" placeholder="https://myfavoritewebsite.com" required/>
     </div>
     <div>
         <input id='rating-1' type="radio" name='rating' value='1'/>
