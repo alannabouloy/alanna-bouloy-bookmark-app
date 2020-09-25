@@ -10,12 +10,21 @@ import api from './api';
 //main function
 const main = function(){
 //call event listener function
-//call render
+
+  api.getBookmarks()
+    .then((bookmarks) => {
+      bookmarks.forEach((bookmark) => {
+        store.addBookmark(bookmark);
+        store.bookmarkNum += 1;
+      });
+      bookmarkApp.render();
+      console.log('made it to the end of the then statement');
+    });
+  bookmarkApp.bindEventListeners();  
   bookmarkApp.render();
-
-
+ 
   
-  bookmarkApp.render();
+  //call rende
 };
 
 $(main());

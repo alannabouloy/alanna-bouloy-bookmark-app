@@ -11,6 +11,11 @@ import api from './api';
 
 const handleAddButton = function(){
   //adds new bookmarks to the store
+  $('main').on('click', '.add-bookmark', event =>
+  {
+    store.toggleAdding();
+    render();
+  });
   //listens for when add button is clicked
   //changes store to show add button is clicked
   //render add page
@@ -18,6 +23,21 @@ const handleAddButton = function(){
 
 const handleSubmitButon = function(){
   //listen for when Submit button is clicked
+  $('main').on('submit', '#js-add-form', event => {
+    event.preventDefault();
+    let bookmark = $(event.currentTarget).serializeJson();
+    console.log(bookmark);
+    api.createBookmark(bookmark)
+      .then(newBookmark => {
+        store.addBookmark(newBookmark);
+        store.toggleAdding;
+        
+        render();
+      }).catch((error) => {
+        store.setError(error.message);
+        console.log(store.error);
+      });
+  });
   //collects data from Form
   //determine if editing or adding new
   //update api
@@ -193,18 +213,19 @@ const mainTemplate = function(){
 
 const addTemplate = function(){
   $('main').addClass('add-page').removeClass('start-page edit-page main-page');
-  const html = `<form name="add-form" id="js-add-form">
+  const html = `<form name="form" id="js-add-form">
     <div>
       <label for="js-bookmark-title">Title</label>
       <input
         type="text"
+        name="title"
         id="js-bookmark-title"
         placeholder="My Favorite Website"
       />
     </div>
     <div>
         <label for='js-bookmark-url'>Website URL</label>
-        <input type="text" id='js-bookmark-url' placeholder="https://myfavoritewebsite.com"/>
+        <input type="text" id='js-bookmark-url' name= "url" placeholder="https://myfavoritewebsite.com"/>
     </div>
     <div>
         <input id='rating-1' type="radio" name='rating' value='1'/>
@@ -224,10 +245,10 @@ const addTemplate = function(){
     </div>
     <div>
         <label for="js-bookmark-description">Description</label>
-        <textarea placeholder="This is my favorite website!"></textarea>
+        <textarea name = "desc" placeholder="This is my favorite website!"></textarea>
     </div>
     <div>
-        <input id= 'js-bookmark-submit' type="submit" value="Add Bookmark">
+        <input name= "submit" id= 'js-bookmark-submit' type="submit" value="Add Bookmark">
     </div>
 
   </form>`;
@@ -284,6 +305,7 @@ const editTemplate = function(bookmark){
   //footer for edit page
 };
 //Logic
+
 
 //Export
 export default {

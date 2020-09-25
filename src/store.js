@@ -1,4 +1,7 @@
-const bookmarks = [{title: 'Google', url: 'https://wwww.google.com', desc:'a handy site', rating: 5, expanded: false, id: 1}];
+import api from './api';
+import bookmarkApp from './bookmark-app';
+
+const bookmarks = [];
 //each bookmark should be and object with following data: title (str), url(str), description(str), rating(num 1-5), expanded(bool), id(str)
 
 let bookmarkNum = 0;
@@ -12,7 +15,9 @@ const findById = function(id){
 };
 
 const addBookmark = function(bookmark){
+  bookmark.expanded = false;
   bookmarks.push(bookmark);
+  bookmarkCounter();
 };
 
 const findAndDelete = function(id){
@@ -38,12 +43,13 @@ const findAndUpdate = function(id, newData){
 };
 
 const bookmarkCounter = function(){
-  this.bookmarkNum += 1;
+  bookmarkNum = bookmarkNum + 1;
 };
 
 const setError = function(error){
   this.error = error;
 };
+
 
 export default {
   bookmarks,

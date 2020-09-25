@@ -1,3 +1,4 @@
+import $ from 'jquery';
 const BASE_URL = 'https://thinkful-list-api.herokuapp.com/alanna/bookmarks';
 
 const apiFetch = function(...args){
@@ -32,11 +33,11 @@ const getBookmarks = function(){
 const createBookmark = function(bookmark){
   const newBookmark = JSON.stringify(bookmark);
   return apiFetch(BASE_URL, {
-    method: 'POST',
-    headers: {
+    'method': 'POST',
+    'headers': {
       'Content-type': 'application/json',
     },
-    body: newBookmark
+    'body': newBookmark
   });
 };
 
@@ -57,6 +58,14 @@ const deleteBookmark = function(id){
   });
 };
 
+$.fn.extend({serializeJson: function(form){
+  const formData = new FormData(this[0]);
+  const o = {};
+
+  formData.forEach((val, name) => o[name] = val);
+  return o;
+}
+});
 
 export default {
   getBookmarks,
