@@ -56,6 +56,10 @@ const handleEditButton = function(){
 
 const handleBookmarkToggleClick = function(){
   //listens for when user clicks on bookmark to display extended view
+  $('main').on('click', '.js-bookmark-element', event => {
+     
+    $(event.currentTarget).siblings('div').toggleClass('hidden');
+  });
   //event listener
   //when clicked, toggle store to show that bookmark has been clicked
   //render page
