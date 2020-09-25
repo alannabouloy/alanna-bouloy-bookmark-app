@@ -62,7 +62,11 @@ $.fn.extend({serializeJson: function(form){
   const formData = new FormData(this[0]);
   const o = {};
 
-  formData.forEach((val, name) => o[name] = val);
+  formData.forEach((val, name) => {
+    if(val){
+      o[name] = val;
+    }
+  });
   return o;
 }
 });

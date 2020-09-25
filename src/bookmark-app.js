@@ -21,7 +21,7 @@ const handleAddButton = function(){
   //render add page
 };
 
-const handleSubmitButon = function(){
+const handleAddSubmitButon = function(){
   //listen for when Submit button is clicked
   $('main').on('submit', '#js-add-form', event => {
     event.preventDefault();
@@ -49,9 +49,33 @@ const handleSubmitButon = function(){
 };
 
 const handleEditButton = function(){
+  $('main').on('click', '.edit-button', event =>{
+    store.toggleEditing();
+    render();
+  });
   //listen for when Edit Button is clicked
   //changes store to show edit button is clicked
   //render edit page
+};
+
+const handleEditSubmitButton = function(){
+  $('main').on('submit', '#js-edit-form', event =>{
+    event.preventDefault();
+    console.log('clicked');
+    const updatedBookmark = $(event.currentTarget).serializeJson();
+    console.log(updatedBookmark);
+    store.toggleEditing();
+    
+    const id = $(event.currentTarget).find('div').attr('id');
+    console.log(id);
+
+    api.updateBookmark(id, updatedBookmark)
+      .then(() => {
+        store.findAndUpdate(id, updatedBookmark);
+        render();
+      });
+        
+  });
 };
 
 const handleBookmarkToggleClick = function(){
@@ -102,11 +126,12 @@ const handleFilterDropdown = function(){
 
 const bindEventListeners = function(){
   handleAddButton();
-  handleSubmitButon();
+  handleAddSubmitButon();
   handleEditButton();
   handleBookmarkToggleClick();
   handleDeleteButton();
   handleFilterDropdown();
+  handleEditSubmitButton();
 };
 //Render Function
 
@@ -298,17 +323,18 @@ const addTemplate = function(){
 const editTemplate = function(bookmark){
   $('main').addClass('edit-page').removeClass('start-page add-page main-page');
   const html = `<form name="edit-form" id="js-edit-form">
-    <div>
+    <div id = ${bookmark.id}>
       <label for="js-bookmark-title">Title</label>
       <input
         type="text"
         id="js-bookmark-title"
         placeholder="${bookmark.title}"
+        name = "title"
       />
     </div>
     <div>
         <label for='js-bookmark-url'>Website URL</label>
-        <input type="text" id='js-bookmark-url' placeholder="${bookmark.url}"/>
+        <input type="text" id='js-bookmark-url' placeholder="${bookmark.url}" name ="url"/>
     </div>
     <div>
         <input id='rating-1' type="radio" name='rating' value='1'/>
@@ -328,7 +354,7 @@ const editTemplate = function(bookmark){
     </div>
     <div>
         <label for="js-bookmark-description">Description</label>
-        <textarea placeholder="${bookmark.desc}"></textarea>
+        <textarea placeholder="${bookmark.desc}" name = "desc"></textarea>
     </div>
     <div>
         <input id= 'js-bookmark-submit' type="submit" value="Change Bookmark">

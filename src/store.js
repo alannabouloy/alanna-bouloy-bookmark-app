@@ -40,8 +40,8 @@ const changeFilter = function(rating){
 };
 
 const findAndUpdate = function(id, newData){
-  const index = bookmarks.findIndex(bookmark => bookmark.id === id);
-  bookmarks[index] = newData;
+  const bookmark = findById(id);
+  Object.assign(bookmark, newData);
 };
 
 const bookmarkCounter = function(){
