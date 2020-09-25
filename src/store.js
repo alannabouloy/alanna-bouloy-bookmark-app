@@ -26,11 +26,12 @@ const findAndDelete = function(id){
 };
 
 const toggleAdding = function(){
-  this.adding = !adding;
+  this.adding = !this.adding;
+  console.log('toggled');
 };
 
 const toggleEditing = function(){
-  this.editing = !editing;
+  this.editing = !this.editing;
 };
 
 const changeFilter = function(rating){

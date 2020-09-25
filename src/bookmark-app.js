@@ -26,12 +26,15 @@ const handleSubmitButon = function(){
   $('main').on('submit', '#js-add-form', event => {
     event.preventDefault();
     let bookmark = $(event.currentTarget).serializeJson();
+    store.toggleAdding();
     console.log(bookmark);
+    
     api.createBookmark(bookmark)
       .then(newBookmark => {
         store.addBookmark(newBookmark);
-        store.toggleAdding;
+        store.bookmarkNum += 1;
         
+
         render();
       }).catch((error) => {
         store.setError(error.message);
@@ -60,9 +63,23 @@ const handleBookmarkToggleClick = function(){
 
 const handleDeleteButton = function(){
   //listen for delete button click
+  $('main').on('click', '.delete-button', event => {
+    const id = getItemIdFromElement(event.currentTarget);
+    api.deleteBookmark(id)
+      .then(() => {
+        store.findAndDelete(id);
+        render();
+      });
+  });
+  render();
   //update api
   //update store
   //render
+};
+
+const getItemIdFromElement = function (item) {
+  return $(item).attr('id');
+    
 };
 
 const handleFilterDropdown = function(){
@@ -123,14 +140,14 @@ const render = function(){
 //Templates
 const generateBookmark = function(bookmark){
   const htmlString = ` <li>
-    <div class="bookmark-button">
+    <div class="js-bookmark-element" >
       <button>${bookmark.title} Rating: ${bookmark.rating}</button>
     </div>
     <div class="hidden">
       <div class="description">
         <p>${bookmark.desc}</p>
         <div class="url-link">
-          <a href="${bookmark.url}" alt="${bookmark.title}">Visit Site</a><button class='delete-button'>Delete</button><button class="edit-button">Edit</button>
+          <a href="${bookmark.url}" alt="${bookmark.title}">Visit Site</a><button id="${bookmark.id}" class='delete-button'>Delete</button><button class="edit-button">Edit</button>
         </div>
       </div>
     </div>
