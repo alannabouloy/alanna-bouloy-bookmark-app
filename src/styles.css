@@ -7,3 +7,7 @@ h1 {
     border: solid;
     border-color: #000;
 }
+
+.hidden {
+    display: none;
+}

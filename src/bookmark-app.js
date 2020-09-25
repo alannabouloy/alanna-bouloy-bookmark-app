@@ -86,6 +86,11 @@ const getItemIdFromElement = function (item) {
 };
 
 const handleFilterDropdown = function(){
+  $('main').on('change', '#filter-form', event => {
+    store.filter = $('#filter-drop').val();
+    render();
+    console.log(store.filter);
+  });
   //listen for when filter dropdown changes
   //update store
   //render
@@ -142,7 +147,11 @@ const render = function(){
 
 //Templates
 const generateBookmark = function(bookmark){
-  const htmlString = ` <li>
+  let listElement = '<li>';
+  if(bookmark.rating < store.filter) {
+    listElement = '<li class= "hidden">';
+  }
+  let  htmlString = ` ${listElement}
     <div class="js-bookmark-element" >
       <button>${bookmark.title} Rating: ${bookmark.rating}</button>
     </div>
@@ -155,6 +164,9 @@ const generateBookmark = function(bookmark){
       </div>
     </div>
   </li>`;
+
+  
+    
 
   return htmlString;
   //create default string that uses bookmark object to fill in title and rating
@@ -182,12 +194,12 @@ const startTemplate = function(){
       <div>
         <form id="filter-form">
           <select id="filter-drop" name="rating">
-            <option value="default">Filter</option>
-            <option value="> 1 star"> 1+ Star</option>
-            <option value="> 2 stars"> 2+ Stars</option>
-            <option value="> 3 stars"> 3+ Stars</option>
-            <option value="> 4 stars"> 4+ Stars</option>
-            <option value="5 stars"> 5 Stars</option>
+            <option value="0">Filter</option>
+            <option value="1"> 1+ Star</option>
+            <option value="2"> 2+ Stars</option>
+            <option value="3"> 3+ Stars</option>
+            <option value="4"> 4+ Stars</option>
+            <option value="5"> 5 Stars</option>
           </select>
         </form>
       </div>
@@ -206,12 +218,12 @@ const mainTemplate = function(){
     <div>
       <form id="filter-form">
         <select id="filter-drop" name="rating">
-          <option value="default">Filter</option>
-          <option value="> 1 star">> 1 Star</option>
-          <option value="> 2 stars">> 2 Stars</option>
-          <option value="> 3 stars">> 3 Stars</option>
-          <option value="> 4 stars">> 4 Stars</option>
-          <option value="5 stars">5 Stars</option>
+          <option value="0">Filter</option>
+          <option value="1"> 1+ Star</option>
+          <option value="2"> 2+ Stars</option>
+          <option value="3"> 3+ Stars</option>
+          <option value="4"> 4+ Stars</option>
+          <option value="5"> 5 Stars</option>
         </select>
       </form>
     </div>
