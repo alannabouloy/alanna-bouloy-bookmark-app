@@ -89,6 +89,20 @@ const handleBookmarkToggleClick = function(){
   //render page
 };
 
+const handleCancelAddButton = function(){
+  $('main').on('click', '.js-cancel-button', event => {
+    store.toggleAdding();
+    render();
+  });
+};
+
+const handleCancelEditButton = function(){
+  $('main').on('click', '.js-cancel-edit-button', event => {
+    store.toggleEditing();
+    render();
+  });
+};
+
 const handleDeleteButton = function(){
   //listen for delete button click
   $('main').on('click', '.delete-button', function(event) {
@@ -132,6 +146,8 @@ const bindEventListeners = function(){
   handleDeleteButton();
   handleFilterDropdown();
   handleEditSubmitButton();
+  handleCancelAddButton();
+  handleCancelEditButton();
 };
 //Render Function
 
@@ -180,15 +196,16 @@ const generateBookmark = function(bookmark){
   if(bookmark.rating < store.filter) {
     listElement = '<li class= "hidden">';
   }
+  
   let  htmlString = ` ${listElement}
     <div class="js-bookmark-element" >
-      <button>${bookmark.title} Rating: ${bookmark.rating}</button>
+      <button>${bookmark.title} &nbsp ${starIcon(bookmark.rating)}</button>
     </div>
     <div class="hidden">
       <div class="description">
         <p>${bookmark.desc}</p>
         <div class="url-link">
-          <a href="${bookmark.url}" alt="${bookmark.title}">Visit Site</a><button id="${bookmark.id}" class='delete-button'>Delete</button><button class="edit-button">Edit</button>
+          <a href="${bookmark.url}" alt="${bookmark.title}">Visit Site</a><button id="${bookmark.id}" class='delete-button'><i class="far fa-trash-alt"></i></button><button class="edit-button"><i class="fas fa-edit"></i></button>
         </div>
       </div>
     </div>
@@ -218,7 +235,7 @@ const startTemplate = function(){
   $('main').addClass('start-page').removeClass('add-page edit-page main-page');
   const html = `<div class="button-group">
       <div>
-        <button class="add-bookmark">New</button>
+        <button class="add-bookmark"><i class="fas fa-bookmark">New Bookmark</i></button>
       </div>
       <div>
         <form id="filter-form">
@@ -242,7 +259,7 @@ const mainTemplate = function(){
 
   const htmlString = `<div class="button-group">
     <div>
-      <button class="add-bookmark">New</button>
+      <button class="add-bookmark"><i class="fas fa-bookmark"> New</i></button>
     </div>
     <div>
       <form id="filter-form">
@@ -276,7 +293,7 @@ const addTemplate = function(){
   $('main').addClass('add-page').removeClass('start-page edit-page main-page');
   const html = `<form name="form" id="js-add-form">
     <div>
-      <label for="js-bookmark-title">Title</label>
+      <label for="js-bookmark-title">Title:</label>
       <input
         type="text"
         name="title"
@@ -286,34 +303,53 @@ const addTemplate = function(){
       />
     </div>
     <div>
-        <label for='js-bookmark-url'>Website URL</label>
+        <label for='js-bookmark-url'>Url:</label>
         <input type="text" id='js-bookmark-url' name= "url" placeholder="https://myfavoritewebsite.com" required/>
     </div>
-    <div>
+    <div class='radio'>
+        <div>
         <input id='rating-1' type="radio" name='rating' value='1'/>
         <label for='rating-1'>1 Star</label>
+        </div>
 
+        <div>
         <input id='rating-2' type='radio' name='rating' value='2'/>
         <label for="rating-2">2 Stars</label>
+        </div>
 
+        <div>
         <input id="rating-3" type='radio' name="rating" value="3"/>
         <label for="rating-3">3 Stars</label>
+        </div>
 
+        <div>
         <input type="radio" name="rating" id="rating-4" value="4"/>
         <label for="rating-4">4 Stars</label>
+        </div>
 
+        <div>
         <input type="radio" name="rating" id="rating-5" value="5"/>
         <label for="rating-5">5 Stars</label>
+        </div>
     </div>
     <div>
-        <label for="js-bookmark-description">Description</label>
+        <label for="js-bookmark-description">Description:</label>
         <textarea name = "desc" placeholder="This is my favorite website!"></textarea>
     </div>
+    <div class='button-group'>
     <div>
         <input name= "submit" id= 'js-bookmark-submit' type="submit" value="Add Bookmark">
     </div>
+    <div>
+        <button class='js-cancel-button'>Cancel</button>
+    </div>
+    </div>
 
-  </form>`;
+  </form>
+  
+  `;
+
+  
   return html;
   //header for add page
   //form for add page
@@ -356,8 +392,13 @@ const editTemplate = function(bookmark){
         <label for="js-bookmark-description">Description</label>
         <textarea placeholder="${bookmark.desc}" name = "desc"></textarea>
     </div>
+    <div class='button-group'>
     <div>
-        <input id= 'js-bookmark-submit' type="submit" value="Change Bookmark">
+        <input name= "submit" id= 'js-bookmark-submit' type="submit" value="Change Bookmark">
+    </div>
+    <div>
+        <button class='js-cancel-edit-button'>Cancel</button>
+    </div>
     </div>
 
   </form>`;
@@ -368,7 +409,14 @@ const editTemplate = function(bookmark){
   //footer for edit page
 };
 //Logic
-
+const starIcon = function(rating){
+  const star = `<i class="fas fa-star"></i>`;
+  let starStr = '';
+  for(let i = 0; i < rating; i++){
+    starStr = `${starStr}${star}`;
+  }
+  return starStr;
+};
 
 //Export
 export default {
