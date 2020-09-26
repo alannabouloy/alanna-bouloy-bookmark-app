@@ -103,6 +103,11 @@ button {
     text-align: left;
     border-radius: 10px;
 }
+.welcome-message {
+    flex-direction: column;
+    text-align: center;
+    color: #2F1847;
+}
 .description {
     background-color: lightgrey;
     height: 100px;
@@ -136,4 +141,48 @@ main li {
 .hidden {
     display: none;
 
+}
+.error-container {
+    background-color: #ffffff;
+    color: #55917F;
+    border-radius: 10px;
+    font-family: 'PT Sans', sans-serif;
+    padding: 10px;
+    margin: 5px;
+}
+@media all and (min-width: 600px) {
+    main {
+        background-color: #ffffff;
+        border-radius: 25px;
+        padding: 20px;
+        height: 80%;
+        width: 70%;
+        margin: auto;
+        border: solid 5px #957186;
+        font-family:'PT Sans', sans-serif ;
+    }
+
+    form {
+        text-align: center;
+    }
+
+    textarea {
+      width: 50%;  
+      height: 100px;
+    }
+
+    .js-bookmark-element button {
+        width: 70%;
+        margin-left: 10%;
+    }
+
+    .description {
+        width: 70%;
+        margin-left: 10%;
+    }
+
+    .delete-button{
+        margin-left: 40%;
+    }
+        
 }

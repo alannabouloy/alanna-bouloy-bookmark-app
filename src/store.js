@@ -9,6 +9,7 @@ let adding = false;
 let editing = false;
 let error = null;
 let filter = 0;
+let selected = '';
 
 const findById = function(id){
   return bookmarks.find(currentItem => currentItem.id === id);
@@ -41,6 +42,7 @@ const changeFilter = function(rating){
 
 const findAndUpdate = function(id, newData){
   const bookmark = findById(id);
+  console.log(bookmark);
   Object.assign(bookmark, newData);
 };
 
@@ -68,4 +70,6 @@ export default {
   findAndUpdate,
   bookmarkCounter,
   setError,
+  selected,
+  findById,
 };

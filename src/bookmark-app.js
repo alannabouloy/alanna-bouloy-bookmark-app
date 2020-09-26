@@ -39,7 +39,9 @@ const handleAddSubmitButon = function(){
       }).catch((error) => {
         store.setError(error.message);
         console.log(store.error);
+        renderError();
       });
+      
   });
   //collects data from Form
   //determine if editing or adding new
@@ -51,6 +53,10 @@ const handleAddSubmitButon = function(){
 const handleEditButton = function(){
   $('main').on('click', '.edit-button', event =>{
     store.toggleEditing();
+    const id = $(event.currentTarget).siblings('.delete-button').attr('id');
+    console.log(id);
+
+    store.selected = id;
     render();
   });
   //listen for when Edit Button is clicked
@@ -73,6 +79,10 @@ const handleEditSubmitButton = function(){
       .then(() => {
         store.findAndUpdate(id, updatedBookmark);
         render();
+      })
+      .catch((error) => {
+        store.setError(error.message);
+        renderError();
       });
         
   });
@@ -113,6 +123,10 @@ const handleDeleteButton = function(){
         store.findAndDelete(id);
         store.bookmarkNum -= 1;
         render();
+      })
+      .catch((error) => {
+        store.setError(error.message);
+        renderError();
       });
   });
   render();
@@ -138,6 +152,16 @@ const handleFilterDropdown = function(){
   //render
 };
 
+const handleCloseError = function(){
+  $('.error-container').on('click', '#ex-out', event => {
+    console.log('clicked');
+    store.setError(null);
+    
+    $('.error-container').toggleClass('hidden');
+    renderErrot();
+  });
+};
+
 const bindEventListeners = function(){
   handleAddButton();
   handleAddSubmitButon();
@@ -148,6 +172,7 @@ const bindEventListeners = function(){
   handleEditSubmitButton();
   handleCancelAddButton();
   handleCancelEditButton();
+  handleCloseError();
 };
 //Render Function
 
@@ -171,7 +196,7 @@ const render = function(){
       console.log('there are bookmarks in store and add template rendered');
     }
     else if(store.editing){
-      $('main').html(editTemplate(store.bookmarks[0]));
+      $('main').html(editTemplate(store.findById(store.selected)));
       console.log('edit page is rendering');
     }else{
       $('main').html(mainTemplate());
@@ -188,6 +213,19 @@ const render = function(){
   //if false then render mainTemplate
 
 
+};
+
+const renderError = function(){
+  if(store.error){
+    $('.error-container').toggleClass('hidden');
+    const errorMessage = generateErrorString(store.error);
+    console.log('error stored');
+    $('.error-container').html(errorMessage);
+    console.log('error rendered');
+  }else{
+    $('.error-container').empty();
+    ('no error');
+  }
 };
 
 //Templates
@@ -220,6 +258,14 @@ const generateBookmark = function(bookmark){
   //if true then return longer strong that has full view, otherwise return default string
 };
 
+const generateErrorString = function(message){
+  console.log('error generated');
+  return `<div class = 'error-message'>
+        <button id='ex-out'>X</button>
+        <p>${message}</p>
+        </div>`;
+};
+
 const generateBookmarkString = function(){
 //use map to transform array of bookmark objects into an array of bookmark strings
 //return array joined using array.join method 
@@ -235,7 +281,7 @@ const startTemplate = function(){
   $('main').addClass('start-page').removeClass('add-page edit-page main-page');
   const html = `<div class="button-group">
       <div>
-        <button class="add-bookmark"><i class="fas fa-bookmark">New Bookmark</i></button>
+        <button class="add-bookmark"><i class="fas fa-bookmark"> New</i></button>
       </div>
       <div>
         <form id="filter-form">
@@ -248,6 +294,14 @@ const startTemplate = function(){
             <option value="5"> 5 Stars</option>
           </select>
         </form>
+      </div>
+      </div>
+    <div class='welcome-message'>
+      <div>
+        <h2>Welcome!</h2>
+      </div>
+      <div>
+        <p>Click the New button to add your first bookmark!</p>
       </div>
     </div>`;
   return html;
@@ -333,8 +387,12 @@ const addTemplate = function(){
         </div>
     </div>
     <div>
+      <div>
         <label for="js-bookmark-description">Description:</label>
+      </div>
+      <div>
         <textarea name = "desc" placeholder="This is my favorite website!"></textarea>
+      </div>
     </div>
     <div class='button-group'>
     <div>
@@ -358,6 +416,7 @@ const addTemplate = function(){
 
 const editTemplate = function(bookmark){
   $('main').addClass('edit-page').removeClass('start-page add-page main-page');
+  
   const html = `<form name="edit-form" id="js-edit-form">
     <div id = ${bookmark.id}>
       <label for="js-bookmark-title">Title</label>
@@ -389,12 +448,16 @@ const editTemplate = function(bookmark){
         <label for="rating-5">5 Stars</label>
     </div>
     <div>
+      <div>
         <label for="js-bookmark-description">Description</label>
+      </div>
+      <div>
         <textarea placeholder="${bookmark.desc}" name = "desc"></textarea>
+      </div>
     </div>
     <div class='button-group'>
     <div>
-        <input name= "submit" id= 'js-bookmark-submit' type="submit" value="Change Bookmark">
+        <input name= "submit" id= 'js-bookmark-submit' type="submit" value="Change">
     </div>
     <div>
         <button class='js-cancel-edit-button'>Cancel</button>
